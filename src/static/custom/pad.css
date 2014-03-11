@@ -1,0 +1,29 @@
+/*
+  custom css files are loaded after core css files. Simply use the same selector to override a style.
+  Example:
+      #editbar LI {border:1px solid #000;}
+    overrides
+      #editbar LI {border:1px solid #d5d5d5;}
+    from pad.css
+*/
+
+#innerdocbody {
+	font-family: Helvetica-Light, Helvetica, Arial, sans-serif !important; 
+	font-size: 17px;
+	line-height: 1.4em;
+	letter-spacing: .2px;
+	padding: 0;
+	background: #ffffff;
+}
+html {
+	background: #e5e5e5;
+}
+.custom-line-class {
+	padding: 0 20px;
+	border-left: 5px solid #ffffff;
+}
+
+.line-toc {
+	font-size: 20px !important;
+	line-height: 24px;
+}
