@@ -14,7 +14,7 @@ html {
 }
 body,
 textarea {
-  font-family: Helvetica, Arial, sans-serif
+  font-family: Helvetica, Arial, sans-serif;
 }
 iframe {
   position: absolute

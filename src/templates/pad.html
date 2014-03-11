@@ -181,7 +181,33 @@
             <% e.end_block(); %>
         </div>
 
+        <style type="text/css">
+        #editorcontainer {
+            width: 900px;
+            margin: 0 auto;
+        }
+        .b-names {
+            width: 900px;
+            margin: 0 auto;
+        }
+        .b-names--wrap {
+            position: relative;
+            right: 0;
+        }
+        .b-names--one {
+            position: absolute;
+            top: 300px;
+            width: 200px;
+            margin-left: -210px;
+            text-align: right;
+            z-index: 10;
+            font: 13px Helvetica-Light, Helvetica, Arial, sans-serif;
+            xcolor: #888888;
+        }
+        </style>
         <div id="editorcontainerbox">
+            <div class="b-names"><div class="b-names--wrap lineAuthors authorColors">
+            </div></div>
             <div id="editorcontainer"></div>
             <div id="editorloadingbox">
               <div id="passwordRequired">
@@ -472,7 +498,7 @@
 
               /* TODO: These globals shouldn't exist. */
               pad = require('ep_etherpad-lite/static/js/pad').pad;
-              chat = require('ep_etherpad-lite/static/js/chat').chat;
+              // chat = require('ep_etherpad-lite/static/js/chat').chat;
               padeditbar = require('ep_etherpad-lite/static/js/pad_editbar').padeditbar;
               padimpexp = require('ep_etherpad-lite/static/js/pad_impexp').padimpexp;
             }());

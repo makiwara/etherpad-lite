@@ -57,6 +57,42 @@ ul.list-indent6 { list-style-type: none; }
 ul.list-indent7 { list-style-type: none; }
 ul.list-indent8 { list-style-type: none; }
 
+ul.list-todo1 { margin-left: 1.5em; }
+ul.list-todo2 { margin-left: 3em; }
+ul.list-todo3 { margin-left: 4.5em; }
+ul.list-todo4 { margin-left: 6em; }
+ul.list-todo5 { margin-left: 7.5em; }
+ul.list-todo6 { margin-left: 9em; }
+ul.list-todo7 { margin-left: 10.5em; }
+ul.list-todo8 { margin-left: 12em; }
+
+ul.list-todo1,
+ul.list-todo2,
+ul.list-todo3,
+ul.list-todo4,
+ul.list-todo5,
+ul.list-todo6,
+ul.list-todo7,
+ul.list-todo8 { list-style-type: none; }
+
+ul.list-todo1 li:before {
+  font: 14px Helvetica-Light, Helvetica, Arial, sans-serif;
+  speak: none;
+  color: #666;
+  display: inline-block;
+  text-decoration: inherit;
+  width: 1em;
+  margin-top: 4px;
+  margin-right: 5px;
+  float: left;
+  font-variant: normal;
+  text-transform: none;
+  cursor: pointer;
+  line-height: 1em;
+  margin-left: -1.5em;
+  content: '\e600';
+}
+
 body {
   margin: 0;
   white-space: nowrap;
@@ -90,6 +126,7 @@ body.doesWrap {
 }
 
 #sidediv {
+  display: none;
   font-size: 11px;
   font-family: monospace;
   line-height: 16px; /* overridden by sideDiv.style */
@@ -119,8 +156,8 @@ body.doesWrap {
 #outerdocbody iframe {
   display: block; /* codemirror says it suppresses bugs */
   position: relative;
-  left: 32px; /* MIN_LINEDIV_WIDTH + LINE_NUMBER_PADDING_RIGHT + EDIT_BODY_PADDING_LEFT */
-  top: 7px; /* EDIT_BODY_PADDING_TOP - 1*/
+  left: 0; /* 32px; /* MIN_LINEDIV_WIDTH + LINE_NUMBER_PADDING_RIGHT + EDIT_BODY_PADDING_LEFT */
+  top: 0; /*7px; /* EDIT_BODY_PADDING_TOP - 1*/
   border: 0;
   width: 1px; /* changed programmatically */
   height: 1px; /* changed programmatically */

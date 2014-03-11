@@ -27,6 +27,14 @@ plugins = require('ep_etherpad-lite/static/js/pluginfw/client_plugins');
 $ = jQuery = require('./rjquery').$;
 _ = require("./underscore");
 
+// KUSO-
+// use this to flip-flop checkboxes and such
+$( document ).on( 'click', 'ul.list-todo1 li', {}, function(e){ 
+  if (e.pageX < e.target.offsetLeft)
+    alert(1)
+} ); 
+// -KUSO
+
 var isNodeText = Ace2Common.isNodeText,
   browser = $.browser,
   getAssoc = Ace2Common.getAssoc,
@@ -60,11 +68,11 @@ function Ace2Inner(){
   var THE_TAB = '    '; //4
   var MAX_LIST_LEVEL = 8;
 
-  var LINE_NUMBER_PADDING_RIGHT = 4;
-  var LINE_NUMBER_PADDING_LEFT = 4;
-  var MIN_LINEDIV_WIDTH = 20;
-  var EDIT_BODY_PADDING_TOP = 8;
-  var EDIT_BODY_PADDING_LEFT = 8;
+  var LINE_NUMBER_PADDING_RIGHT = 0;
+  var LINE_NUMBER_PADDING_LEFT = 0;
+  var MIN_LINEDIV_WIDTH = 0;
+  var EDIT_BODY_PADDING_TOP = 0;
+  var EDIT_BODY_PADDING_LEFT = 0;
 
   var caughtErrors = [];
 
@@ -99,6 +107,30 @@ function Ace2Inner(){
     alines: [],
     apool: new AttribPool()
   };
+
+  // KUSO-
+  function kusoAuthorRecalc() {
+    var result = [];
+    $('#innerdocbody').children().each(function(){
+      var classes = this.className.split(" ");
+      var cls = classes[0];
+      var author = cls.substr(5);
+      if (author != "")
+      {
+        if (result.length == 0 || result[result.length-1].cls != author)
+        {
+          result[result.length] = {
+            id: this.id,
+            cls: author,
+            top: this.offsetTop
+            // TODO: add author info like name etc.
+          }
+        }
+      }
+    })
+    window.parent.parent.lineWatch(result);
+  }
+  // -KUSO
 
   // lines, alltext, alines, and DOM are set up in init()
   if (undoModule.enabled)
@@ -249,10 +281,22 @@ function Ace2Inner(){
         var parentAuthorStyle = parentDynamicCSS.selectorStyle(authorSelector);
         var anchorStyle = dynamicCSS.selectorStyle(authorSelector + ' > a')
 
+        // KUSO-
         // author color
-        authorStyle.backgroundColor = bgcolor;
-        parentAuthorStyle.backgroundColor = bgcolor;
+        authorStyle.borderBottom = "2px dotted "+bgcolor;
+        // authorStyle.backgroundColor = bgcolor;
+        parentAuthorStyle.color = bgcolor;
+        // line color
+        var lineSelector = ".line-"+getAuthorClassName(author);
+        var lineStyle = dynamicCSS.selectorStyle(lineSelector);
+        lineStyle.borderLeft = "5px solid "+bgcolor;
+        // line+author
+        var lineAuthorSelector = '.authorColors ' + lineSelector + " ." + getAuthorClassName(author);
+        var lineAuthorStyle = dynamicCSS.selectorStyle(lineAuthorSelector);
+        lineAuthorStyle.borderBottom = "0px solid #fff";
+        // -KUSO
 
+        /*
         // text contrast
         if(colorutils.luminosity(colorutils.css2triple(bgcolor)) < 0.5)
         {
@@ -262,7 +306,6 @@ function Ace2Inner(){
           authorStyle.color = null;
           parentAuthorStyle.color = null;
         }
-
         // anchor text contrast
         if(colorutils.luminosity(colorutils.css2triple(bgcolor)) < 0.55)
         {
@@ -270,6 +313,7 @@ function Ace2Inner(){
         }else{
           anchorStyle.color = null;
         }
+        */
       }
     }
   }
@@ -1674,6 +1718,10 @@ function Ace2Inner(){
       //console.log("removed: "+id);
     });
 
+    // KUSO-
+    if (domChanges) kusoAuthorRecalc()
+    // -KUSO
+
     if(scrollToTheLeftNeeded){ // needed to stop chrome from breaking the ui when long strings without spaces are pasted
       $("#innerdocbody").scrollLeft(0);
     }
@@ -1822,6 +1870,7 @@ function Ace2Inner(){
       //}
       p2.mark("addLine");
       info.prepareForAdd();
+
       entry.lineMarker = info.lineMarker;
       if (!nodeToAddAfter)
       {
@@ -2120,6 +2169,10 @@ function Ace2Inner(){
         var n = doc.getElementById(k);
         n.parentNode.removeChild(n);
       });
+
+      // KUSO-
+      kusoAuthorRecalc();
+      // -KUSO
 
       if ((rep.selStart && rep.selStart[0] >= startLine && rep.selStart[0] <= startLine + deleteCount) || (rep.selEnd && rep.selEnd[0] >= startLine && rep.selEnd[0] <= startLine + deleteCount))
       {
@@ -3320,6 +3373,31 @@ function Ace2Inner(){
     }
   }
 
+  function doSpaceKey() {
+    if (!(rep.selStart && rep.selEnd))
+    {
+      return false;
+    }
+    var lineNum = rep.selStart[0];
+    var listType = getLineListType(lineNum);
+    var text = rep.lines.atIndex(lineNum).text;
+    var listRe = /^(( *)([\*\-])|([0-9]+\.)|(\[[ \+\*xv]?\]))$/;
+    var listForm = listRe.exec(text);
+    if (listForm) {
+      var listLevel = 1;
+      if (listForm[2]) listLevel = Math.floor(listForm[2].length/2)+1;
+      if (listLevel < 1) listLevel = 1;
+      var listStyle = 'bullet';
+      if (listForm[4]) listStyle = 'number';
+      if (listForm[5]) listStyle = 'todo';
+      performDocumentReplaceRange([lineNum, 0], [lineNum, text.length], '');
+      doInsertList(listStyle, listLevel);
+      updateBrowserSelectionFromRep();
+      return true;
+    }
+    return false;
+  }
+
   function doReturnKey()
   {
     if (!(rep.selStart && rep.selEnd))
@@ -3456,8 +3534,8 @@ function Ace2Inner(){
 
             if (thisLineListType)
             {
-              // this line is a list
-              if (prevLineBlank && !prevLineListType)
+              // this line is a list (KUSO: and this line is not an empty list)
+              if (prevLineBlank && !prevLineListType && lineEntry.text != "*")
               {
                 // previous line is blank, remove it
                 performDocumentReplaceRange([theLine - 1, prevLineEntry.text.length], [theLine, 0], '');
@@ -3660,6 +3738,17 @@ function Ace2Inner(){
           doDeleteKey(evt);
           specialHandled = true;
         }
+        // KUSO-
+        if ((!specialHandled) && isTypeForSpecialKey && keyCode == 32)
+        {
+          if (doSpaceKey(evt))
+          {
+            fastIncorp(3);
+            evt.preventDefault();
+            specialHandled = true;
+          }
+        }
+        // -KUSO
         if ((!specialHandled) && isTypeForSpecialKey && keyCode == 13)
         {
           // return key, handle specially;
@@ -5090,7 +5179,7 @@ function Ace2Inner(){
   }
 
 
-  function doInsertList(type)
+  function doInsertList(type, listLevel)
   {
     if (!(rep.selStart && rep.selEnd))
     {
@@ -5124,6 +5213,12 @@ function Ace2Inner(){
         level = Number(listType[2]);
       }
       var t = getLineListType(n);
+      // KUSO-
+      if (listLevel) {
+        level = listLevel;
+        t = true;
+      }
+      // -KUSO
       mods.push([n, allLinesAreList ? 'indent' + level : (t ? type + level : type + '1')]);
     }
 

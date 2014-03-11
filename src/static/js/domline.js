@@ -93,8 +93,42 @@ domline.createDomLine = function(nonEmpty, doesWrap, optBrowser, optDocument)
   var perTextNodeProcess = (doesWrap ? _.identity : processSpaces);
   var perHtmlLineProcess = (doesWrap ? processSpaces : _.identity);
   var lineClass = 'ace-line';
+  
+  // KUSO-
+  var spanAuthors = {};
+  function addSpanAuthor(txt, cls) {
+    cls = cls.split(" ")[0];
+    if (!spanAuthors[cls]) spanAuthors[cls]=0;
+    spanAuthors[cls] += txt.length;
+  }
+  function logSpanAuthors() {
+    var t = [];
+    for (var i in spanAuthors)
+      t.push(i+"("+spanAuthors[i]+")");
+  }
+  function getAuthorClass() {
+    var t = "", max=0;
+    for (var i in spanAuthors)
+      if (spanAuthors[i] > max) {
+        max = spanAuthors[i];
+        t = i;
+      }
+    return 'line-' + t;
+  }
+  function getTocClass(node) {
+    var cls = "";
+    for (var i=0; i<node.children.length; i++) {
+      cls = " line-toc ";
+      if (node.children[i].className.indexOf('tag-b') < 0) return "";
+    }
+    return cls;
+  }
+  // -KUSO
+
+
   result.appendSpan = function(txt, cls)
   {
+    addSpanAuthor(txt, cls);
     var processedMarker = false;
     // Handle lineAttributeMarker, if present
     if (cls.indexOf(lineAttributeMarker) >= 0)
@@ -160,7 +194,7 @@ domline.createDomLine = function(nonEmpty, doesWrap, optBrowser, optDocument)
       {
         if (!simpleTags) simpleTags = [];
         simpleTags.push(tag.toLowerCase());
-        return space + tag;
+        return space + tag + ' tag-'+tag;
       });
     }
 
@@ -233,7 +267,9 @@ domline.createDomLine = function(nonEmpty, doesWrap, optBrowser, optDocument)
       curHTML = newHTML;
       result.node.innerHTML = curHTML;
     }
-    if (lineClass !== null) result.node.className = lineClass;
+    if (lineClass !== null) {
+      result.node.className = getTocClass(result.node) + getAuthorClass() +" "+ lineClass + " custom-line-class";
+    }
 
     hooks.callAll("acePostWriteDomLineHTML", {
       node: result.node
