@@ -1,3 +1,168 @@
+# 1.5.7
+ * NEW: Add support for intermediate CA certificates for ssl
+ * NEW: Provide a script to clean up before running etherpad
+ * NEW: Use ctrl+shift+1 to do a ordered list
+ * NEW: Show versions of plugins on startup
+ * NEW: Add author on padCreate and padUpdate hook
+ * Fix: switchToPad method
+ * Fix: Dead keys
+ * Fix: Preserve new lines in copy-pasted text
+ * Fix: Compatibility mode on IE 
+ * Fix: Content Collector to get the class of the DOM-node
+ * Fix: Timeslider export links
+ * Fix: Double prompt on file upload
+ * Fix: setText() replaces the entire pad text
+ * Fix: Accessibility features on embedded pads
+ * Fix: Tidy HTML before abiword conversion
+ * Fix: Remove edit buttons in read-only view
+ * Fix: Disable user input in read-only view
+ * Fix: Pads end with a single newline, rather than two newlines
+ * Fix: Toolbar and chat for mobile devices
+
+# 1.5.6
+ * Fix: Error on windows installations
+
+# 1.5.5
+ * SECURITY: Also don't allow read files on directory traversal on minify paths
+ * NEW: padOptions can be set in settings.json now
+ * Fix: Add check for special characters in createPad API function
+ * Fix: Middle click on a link in firefox don't paste text anymore
+ * Fix: Made setPadRaw async to import larger etherpad files
+ * Fix: rtl
+ * Fix: Problem in older IEs
+ * Other: Update to express 4.x
+ * Other: Dropped support for node 0.8
+ * Other: Update ejs to version 2.x
+ * Other: Moved sessionKey from settings.json to a new auto-generated SESSIONKEY.txt file
+
+# 1.5.4
+ * SECURITY: Also don't allow read files on directory traversal on frontend tests path
+
+# 1.5.3
+ * NEW: Accessibility support for Screen readers, includes new fonts and keyboard shortcuts
+ * NEW: API endpoint for Append Chat Message and Chat Backend Tests
+ * NEW: Error messages displayed on load are included in Default Pad Text (can be supressed)
+ * NEW: Content Collector can handle key values
+ * NEW: getAttributesOnPosition Method
+ * FIX: Firefox keeps attributes (bold etc) on cut/copy -> paste
+ * Fix: showControls=false now works
+ * Fix: Cut and Paste works...
+ * SECURITY: Don't allow read files on directory traversal
+
+# 1.5.2
+ * NEW: Support for node version 0.12.x
+ * NEW: API endpoint saveRevision, getSavedRevisionCount and listSavedRevisions
+ * NEW: setting to allow load testing
+ * Fix: Rare scroll issue
+ * Fix: Handling of custom pad path
+ * Fix: Better error handling of imports and exports of type "etherpad"
+ * Fix: Walking caret in chrome
+ * Fix: Better handling for changeset problems
+ * SECURITY Fix: Information leak for etherpad exports (CVE-2015-2298)
+
+# 1.5.1
+ * NEW: High resolution Icon
+ * NEW: Use HTTPS for plugins.json download
+ * NEW: Add 'last update' column
+ * NEW: Show users and chat at the same time
+ * NEW: Support io.js
+ * Fix: removeAttributeOnLine now works properly
+ * Fix: Plugin search and list
+ * Fix: Issue where unauthed request could cause error
+ * Fix: Privacy issue with .etherpad export
+ * Fix: Freeze deps to improve bisectability
+ * Fix: IE, everything. IE is so broken.
+ * Fix: Timeslider proxy
+ * Fix: All backend tests pass
+ * Fix: Better support for Export into HTML
+ * Fix: Timeslider stars
+ * Fix: Translation update
+ * Fix: Check filesystem if Abiword exists
+ * Fix: Docs formatting
+ * Fix: Move Save Revision notification to a gritter message
+ * Fix: UeberDB MySQL Timeout issue
+ * Fix: Indented +9 list items
+ * Fix: Don't paste on middle click of link
+ * SECURITY Fix: Issue where a malformed URL could cause EP to disclose installation location
+
+# 1.5.0
+ * NEW: Lots of performance improvements for page load times
+ * NEW: Hook for adding CSS to Exports
+ * NEW: Allow shardable socket io
+ * NEW: Allow UI to show when attr/prop is applied (CSS)
+ * NEW: Various scripts
+ * NEW: Export full fidelity pads (including authors etc.)
+ * NEW: Various front end tests
+ * NEW: Backend tests
+ * NEW: switchPad hook to instantly switch between pads
+ * NEW: Various translations
+ * NEW: Icon sets instead of images to provide quality high DPI experience
+ * Fix: HTML Import blocking / hanging server
+ * Fix: Export Bullet / Numbered lists HTML
+ * Fix: Swagger deprecated warning
+ * Fix: Bad session from crashing server
+ * Fix: Allow relative settings path
+ * Fix: Stop attributes being improperly assigned between 2 lines
+ * Fix: Copy / Move Pad API race condition
+ * Fix: Save all user preferences
+ * Fix: Upgrade majority of dependency inc upgrade to SocketIO1+
+ * Fix: Provide UI button to restore maximized chat window
+ * Fix: Timeslider UI Fix
+ * Fix: Remove Dokuwiki
+ * Fix: Remove long paths from windows build (stops error during extract)
+ * Fix: Various globals remvoed
+ * Fix: Move all scripts into bin/
+ * Fix: Various CSS bugfixes for Mobile devices
+ * Fix: Overflow Toolbar
+ * Fix: Line Attribute management
+
+# 1.4.1
+ * NEW: Translations
+ * NEW: userLeave Hook
+ * NEW: Script to reinsert all DB values of a Pad
+ * NEW: Allow for absolute settings paths
+ * NEW: API: Get Pad ID from read Only Pad ID
+ * NEW: Huge improvement on MySQL database read/write (InnoDB to MyISAM)
+ * NEW: Hook for Export File Name
+ * NEW: Preprocessor Hook for DOMLine attributes (allows plugins to wrap entire line contents)
+ * Fix: Exception on Plugin Search and fix for plugins not being fetched
+ * Fix: Font on innerdoc body can be arial on paste
+ * Fix: Fix Dropping of messages in handleMessage
+ * Fix: Don't use Abiword for HTML exports
+ * Fix: Color issues with user Icon
+ * Fix: Timeslider Button
+ * Fix: Session Deletion error
+ * Fix: Allow browser tabs to be cycled when focus is in editor
+ * Fix: Various Editor issues with Easysync potentially entering forever loop on bad changeset
+ 
+# 1.4
+ * NEW: Disable toolbar items through settings.json
+ * NEW: Internal stats/metrics engine
+ * NEW: Copy/Move Pad API functions
+ * NEW: getAttributeOnSelection method
+ * NEW: CSS function when an attribute is active on caret location
+ * NEW: Various new eejs blocks
+ * NEW: Ace afterEditHook
+ * NEW: Import hook to introduce alternative export methods
+ * NEW: preProcessDomLine allows Domline attributes to be processed before native attributes
+ * Fix: Allow for lighter author colors
+ * Fix: Improved randomness of session tokens
+ * Fix: Don't panic if an author2session/group2session no longer exists
+ * Fix: Gracefully fallback to related languages if chosen language is unavailable
+ * Fix: Various changeset/stability bugs
+ * Fix: Re-enable import buttons after failed import
+ * Fix: Allow browser tabs to be cycled when in editor
+ * Fix: Better Protocol detection
+ * Fix: padList API Fix
+ * Fix: Caret walking issue
+ * Fix: Better settings.json parsing
+ * Fix: Improved import/export handling
+ * Other: Various whitespace/code clean-up
+ * Other: .deb packaging creator
+ * Other: More API Documentation
+ * Other: Lots more translations
+ * Other: Support Node 0.11
+
 # 1.3
  * NEW: We now follow the semantic versioning scheme!
  * NEW: Option to disable IP logging
