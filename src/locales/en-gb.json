@@ -37,6 +37,7 @@
 	"pad.settings.chatandusers": "Show Chat and Users",
 	"pad.settings.colorcheck": "Authorship colours",
 	"pad.settings.linenocheck": "Line numbers",
+	"pad.settings.namescheck": "Users' names",
 	"pad.settings.rtlcheck": "Read content from right to left?",
 	"pad.settings.fontType": "Font type:",
 	"pad.settings.fontType.normal": "Normal",

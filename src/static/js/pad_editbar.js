@@ -219,20 +219,6 @@ var padeditbar = (function()
         $('.popup').css("top", $('#editorcontainer').offset().top + "px");
       }
 
-      // If sticky chat is enabled..
-      if($('#options-stickychat').is(":checked")){
-        if($('#editorcontainer').offset()){
-          $('#chatbox').css("top", $('#editorcontainer').offset().top + "px");
-        }
-      };
-
-      // If chat and Users is enabled..
-      if($('#options-chatandusers').is(":checked")){
-        if($('#editorcontainer').offset()){
-          $('#users').css("top", $('#editorcontainer').offset().top + "px");
-        }
-      }
-
     },
     registerDropdownCommand: function (cmd, dropdown) {
       dropdown = dropdown || cmd;
@@ -307,22 +293,6 @@ var padeditbar = (function()
       else if (status == "done")
       {
         syncAnimation.done();
-      }
-    },
-    setEmbedLinks: function()
-    {
-      if ($('#readonlyinput').is(':checked'))
-      {
-        var basePath = document.location.href.substring(0, document.location.href.indexOf("/p/"));
-        var readonlyLink = basePath + "/p/" + clientVars.readOnlyId;
-        $('#embedinput').val("<iframe name='embed_readonly' src='" + readonlyLink + "?showControls=true&showChat=true&showLineNumbers=true&useMonospaceFont=false' width=600 height=400></iframe>");
-        $('#linkinput').val(readonlyLink);
-      }
-      else
-      {
-        var padurl = window.location.href.split("?")[0];
-        $('#embedinput').val("<iframe name='embed_readwrite' src='" + padurl + "?showControls=true&showChat=true&showLineNumbers=true&useMonospaceFont=false' width=600 height=400></iframe>");
-        $('#linkinput').val(padurl);
       }
     }
   };
@@ -399,51 +369,12 @@ var padeditbar = (function()
 
   function registerDefaultCommands(toolbar) {
     toolbar.registerDropdownCommand("showusers", "users");
-    toolbar.registerDropdownCommand("settings");
     toolbar.registerDropdownCommand("connectivity");
-    toolbar.registerDropdownCommand("import_export");
-    toolbar.registerDropdownCommand("embed");
-
-    toolbar.registerCommand("settings", function () {
-      toolbar.toggleDropDown("settings", function(){
-        $('#options-stickychat').focus();
-      });
-    });
-
-    toolbar.registerCommand("import_export", function () {
-      toolbar.toggleDropDown("import_export", function(){
-        // If Import file input exists then focus on it..
-        if($('#importfileinput').length !== 0){
-          setTimeout(function(){
-            $('#importfileinput').focus();
-          }, 100);
-        }else{
-          $('.exportlink').first().focus();
-        }
-      });
-    });
-
     toolbar.registerCommand("showusers", function () {
       toolbar.toggleDropDown("users", function(){
         $('#myusernameedit').focus();
       });
     });
-
-    toolbar.registerCommand("embed", function () {
-      toolbar.setEmbedLinks();
-      toolbar.toggleDropDown("embed", function(){
-        $('#linkinput').focus().select();
-      });
-    });
-
-    toolbar.registerCommand("savedRevision", function () {
-      padsavedrevs.saveNow();
-    });
-
-    toolbar.registerCommand("showTimeSlider", function () {
-      document.location = document.location.pathname+ '/timeslider';
-    });
-
     toolbar.registerAceCommand("bold", aceAttributeCommand);
     toolbar.registerAceCommand("italic", aceAttributeCommand);
     toolbar.registerAceCommand("underline", aceAttributeCommand);
@@ -485,14 +416,6 @@ var padeditbar = (function()
       }
       else {
         ace.ace_setAttributeOnSelection('author', '');
-      }
-    });
-
-    toolbar.registerCommand('timeslider_returnToPad', function(cmd) {
-      if( document.referrer.length > 0 && document.referrer.substring(document.referrer.lastIndexOf("/")-1, document.referrer.lastIndexOf("/")) === "p") {
-        document.location = document.referrer;
-      } else {
-        document.location = document.location.href.substring(0,document.location.href.lastIndexOf("/"));
       }
     });
   }
